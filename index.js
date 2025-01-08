@@ -1,52 +1,34 @@
 import schedule from "node-schedule";
 import { exec } from "child_process";
 
-function generateRandomTimes(numTweets = 12) {
-  // Create array of all possible minutes in a day
-  const allMinutes = [];
-  // Start from 7:00 to 23:00 (active hours)
-  for (let hour = 7; hour <= 23; hour++) {
-    for (let minute = 0; minute < 60; minute++) {
-      allMinutes.push({ hour, minute });
+function generateDailySchedule() {
+  // Available hours (7 AM to 11 PM)
+  const availableHours = Array.from({ length: 17 }, (_, i) => i + 7);
+  const schedule = [];
+  const usedHours = new Set();
+
+  while (schedule.length < 12) {
+    const hour =
+      availableHours[Math.floor(Math.random() * availableHours.length)];
+
+    // Ensure at least 1 hour between tweets
+    if (!usedHours.has(hour)) {
+      usedHours.add(hour);
+      schedule.push({
+        hour: hour,
+        minute: Math.floor(Math.random() * 60),
+      });
     }
   }
 
-  const selectedTimes = [];
-  while (selectedTimes.length < numTweets) {
-    // Get random index
-    const randomIndex = Math.floor(Math.random() * allMinutes.length);
-    const newTime = allMinutes[randomIndex];
-
-    // Check if this time is at least 1 hour away from all other selected times
-    const isValidTime = selectedTimes.every((existingTime) => {
-      const hourDiff = Math.abs(existingTime.hour - newTime.hour);
-      const minuteDiff = Math.abs(existingTime.minute - newTime.minute);
-      const totalMinutesDiff = hourDiff * 60 + minuteDiff;
-      return totalMinutesDiff >= 60;
-    });
-
-    if (isValidTime) {
-      selectedTimes.push(newTime);
-      // Remove nearby times (within 1 hour) from allMinutes
-      const removeIndex = allMinutes.findIndex(
-        (time) => time.hour === newTime.hour && time.minute === newTime.minute
-      );
-      if (removeIndex !== -1) {
-        // Remove times within 1 hour before and after
-        const startRemove = Math.max(0, removeIndex - 60);
-        const endRemove = Math.min(allMinutes.length, removeIndex + 60);
-        allMinutes.splice(startRemove, endRemove - startRemove);
-      }
-    }
-  }
-
-  return selectedTimes.sort((a, b) =>
+  // Sort by time
+  return schedule.sort((a, b) =>
     a.hour === b.hour ? a.minute - b.minute : a.hour - b.hour
   );
 }
 
-// Generate random times for today
-const tweetTimes = generateRandomTimes();
+// Generate schedule
+const tweetTimes = generateDailySchedule();
 
 // Schedule all tweets
 tweetTimes.forEach((time) => {
@@ -69,17 +51,13 @@ tweetTimes.forEach((time) => {
   );
 });
 
-// Log the scheduled times
-console.log("Tweet times scheduled for today:");
+// Log the schedule
+console.log("\nTweet schedule for today:");
 tweetTimes.forEach((time) => {
-  console.log(
-    `${String(time.hour).padStart(2, "0")}:${String(time.minute).padStart(
-      2,
-      "0"
-    )}`
-  );
+  const timeString = `${String(time.hour).padStart(2, "0")}:${String(
+    time.minute
+  ).padStart(2, "0")}`;
+  console.log(timeString);
 });
 
-console.log(
-  "Twitter bot is running and will execute generateTweet.js at the randomly generated times."
-);
+console.log("\nTwitter bot is running with the above schedule.");
