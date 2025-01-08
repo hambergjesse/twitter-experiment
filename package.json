@@ -1,0 +1,22 @@
+{
+  "name": "twitter-experiment",
+  "version": "1.0.0",
+  "main": "generateTweet.js",
+  "type": "module",
+  "scripts": {
+    "start": "node generateTweet.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.33.1",
+    "@google-ai/generativelanguage": "^2.6.0",
+    "@google/generative-ai": "^0.21.0",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.7",
+    "google-auth-library": "^9.14.1",
+    "got": "^11.8.6",
+    "node-schedule": "^2.1.1",
+    "oauth-1.0a": "^2.2.6",
+    "qs": "^6.10.3",
+    "twitter-api-v2": "^1.19.0"
+  }
+}
