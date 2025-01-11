@@ -36,7 +36,6 @@ Rules for the tweet:
 - Sound impulsive
 - Keep it relatable
 - No caps or grammar
-- Can use :> <3 x </3 :3
 - Keep flirty/sad tone
 - Can be absolutely absurd
 - Do not censor but avoid hate speech
